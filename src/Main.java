@@ -5,6 +5,9 @@ import javafx.stage.Stage;
 import javafx.scene.layout.*;
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
+import javafx.scene.image.ImageView;
+import javafx.scene.control.ContentDisplay;
+import javafx.scene.image.Image;
 // import java.lang.Math;
 import javafx.scene.text.Font;
 
@@ -21,7 +24,14 @@ public class Main extends Application{
         heading.setLayoutY(200);
         heading.setId("title");
 
-        Button record=new Button("record");
+        Image mic_icon = new Image(getClass().getResourceAsStream("/resources/microphone.png"));
+        ImageView micView = new ImageView(mic_icon);
+        micView.setFitWidth(20);  
+        micView.setFitHeight(25); 
+
+        Button record=new Button("record ",micView);
+        record.setContentDisplay(ContentDisplay.RIGHT);
+        record.setAlignment(Pos.CENTER);
         record.setMinWidth(170);
         record.setMaxHeight(45);
 

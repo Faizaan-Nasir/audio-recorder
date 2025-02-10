@@ -1,0 +1,28 @@
+.root {
+    -fx-background-image: url("../resources/homepage.png");
+    -fx-background-size: cover;
+    -fx-padding: 0;
+}
+
+@font-face {
+    font-family: "Jersey 10";
+    src: url("../resources/fonts/Jersey10-Regular.ttf");
+}
+
+#title {
+    -fx-font-size: 70px;
+    -fx-text-fill: white;
+    -fx-font-family: "Jersey 10", sans-serif;
+}
+
+.button {
+    -fx-font-family: "Jersey 10", sans-serif;
+    -fx-text-fill: white;
+    -fx-font-size: 30px;
+    -fx-background-color: rgba(227, 227, 227, 0.10);
+    -fx-background-radius: 22px;
+}
+
+.button:hover {
+    -fx-background-color: rgba(220, 220, 220, 0.20);
+}

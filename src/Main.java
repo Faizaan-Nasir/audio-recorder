@@ -1,9 +1,11 @@
 import javafx.application.Application;
 import javafx.geometry.Pos;
 import javafx.scene.Scene;
-import javafx.stage.Stage;
 import javafx.scene.layout.*;
 import javafx.scene.control.Button;
+import javafx.scene.effect.DropShadow;
+import javafx.scene.paint.Color;
+import javafx.stage.Stage;
 import javafx.scene.control.Label;
 import javafx.scene.image.ImageView;
 import javafx.scene.control.ContentDisplay;
@@ -12,10 +14,42 @@ import javafx.scene.image.Image;
 import javafx.scene.text.Font;
 
 public class Main extends Application{
+    private Stage primaryStage;
+
+    public void showDashboard() {
+        Pane dashboardRoot = new Pane();
+        Font.loadFont(getClass().getResourceAsStream("/resources/fonts/Jersey10-Regular.ttf"), 70);
+    
+        Label dasheading = new Label("Dashboard");
+        dasheading.setMinWidth(900);
+        dasheading.setLayoutX(30);
+        dasheading.setLayoutY(10);
+        dasheading.setId("dashboardtitle");
+    
+        Button backButton = new Button("Home");
+        backButton.setMinWidth(90);
+        backButton.setMaxWidth(90);
+        backButton.setMaxHeight(10);
+        backButton.setId("backbutton");
+        backButton.setOnAction(e -> start(primaryStage));
+    
+        HBox dashbuttonContainer = new HBox(backButton);
+        dashbuttonContainer.setLayoutX(780);
+        dashbuttonContainer.setLayoutY(20);
+        dashbuttonContainer.setMinWidth(100);
+    
+        dashboardRoot.getChildren().addAll(dasheading, dashbuttonContainer);
+        Scene dashboardScene = new Scene(dashboardRoot, 900, 600);
+        primaryStage.setTitle("Dashboard");
+        primaryStage.setScene(dashboardScene);
+        dashboardScene.getStylesheets().add(getClass().getResource("/styles/styles.css").toExternalForm());
+    }
+
     @Override
     public void start(Stage primaryStage) {
+        this.primaryStage = primaryStage;
         Font.loadFont(getClass().getResourceAsStream("/resources/fonts/Jersey10-Regular.ttf"), 70);
-        Pane root=new Pane();
+        Pane homeroot=new Pane();
 
         Label heading=new Label("Voice Recorder");
         heading.setMinWidth(900);
@@ -32,21 +66,22 @@ public class Main extends Application{
         Button record=new Button("record ",micView);
         record.setContentDisplay(ContentDisplay.RIGHT);
         record.setAlignment(Pos.CENTER);
-        record.setMinWidth(170);
-        record.setMaxHeight(45);
-
+        record.setMinWidth(150);
+        record.setMaxHeight(40);
+                
         Button dashboard=new Button("dashboard");
         dashboard.setMinWidth(170);
         dashboard.setMaxWidth(170);
-        dashboard.setMaxHeight(45);
+        dashboard.setMaxHeight(40);
+        dashboard.setOnAction(e -> showDashboard());
 
         HBox buttonContainer=new HBox(20,record,dashboard);
         buttonContainer.setLayoutY(300);
         buttonContainer.setMinWidth(900);
         buttonContainer.setAlignment(Pos.CENTER);
 
-        root.getChildren().addAll(heading,buttonContainer);
-        Scene scene = new Scene(root, 900, 600);
+        homeroot.getChildren().addAll(heading,buttonContainer);
+        Scene scene = new Scene(homeroot, 900, 600);
         scene.getStylesheets().add(getClass().getResource("/styles/styles.css").toExternalForm());
 
         primaryStage.setTitle("Audio Recorder");

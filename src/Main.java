@@ -3,8 +3,8 @@ import javafx.geometry.Pos;
 import javafx.scene.Scene;
 import javafx.scene.layout.*;
 import javafx.scene.control.Button;
-import javafx.scene.effect.DropShadow;
-import javafx.scene.paint.Color;
+// import javafx.scene.effect.DropShadow;
+// import javafx.scene.paint.Color;
 import javafx.stage.Stage;
 import javafx.scene.control.Label;
 import javafx.scene.image.ImageView;
@@ -13,20 +13,32 @@ import javafx.scene.image.Image;
 import javafx.scene.text.Font;
 import javafx.stage.DirectoryChooser;
 import java.io.File;
+import java.io.IOException;
+
+import javax.sound.sampled.AudioFileFormat;
+import javax.sound.sampled.AudioFormat;
+import javax.sound.sampled.AudioInputStream;
+import javax.sound.sampled.AudioSystem;
+import javax.sound.sampled.DataLine;
+import javax.sound.sampled.TargetDataLine;
+import java.io.File;
+
 
 public class Main extends Application {
     private Stage primaryStage;
     private HBox directoryContainer; 
 
-    public void changedirectory() {
+
+    // CHANGE DIRECTORY FUNCTION
+    public Button[] changedirectory() {
+        Label directoryLabel = new Label("Selected Folder: None");
+        directoryLabel.setId("directorylabel");
         Button chooseDirButton = new Button("Choose Dir");
         chooseDirButton.setMinWidth(120);
         chooseDirButton.setMaxWidth(120);
         chooseDirButton.setMaxHeight(20);
         chooseDirButton.setId("choosedirbutton");
-
-        Label directoryLabel = new Label("c:user/downloads");
-        directoryLabel.setId("directorylabel");
+        DirectoryChooser directoryChooser = new DirectoryChooser();
 
         directoryContainer = new HBox(20, chooseDirButton, directoryLabel);
         directoryContainer.setLayoutX(30);
@@ -35,8 +47,44 @@ public class Main extends Application {
         directoryContainer.setAlignment(javafx.geometry.Pos.CENTER_LEFT);
         HBox.setHgrow(directoryLabel, Priority.ALWAYS);
         directoryLabel.setMaxWidth(Double.MAX_VALUE);
+        
+        chooseDirButton.setOnAction(e -> {
+            directoryChooser.setTitle("Select a Folder");
+            directoryChooser.setInitialDirectory(new File(System.getProperty("user.home")));
+
+            File selectedDirectory = directoryChooser.showDialog(primaryStage);
+            
+            if (selectedDirectory != null) {
+                directoryLabel.setText("Selected Folder: " + selectedDirectory.getAbsolutePath());
+            }
+            else{
+                directoryLabel.setText("Selected Folder: None");
+            }
+        });
+        Button[] recordingButtons=new Button[0];
+        // to be rethought
+        // if(!directoryLabel.getText().substring(17).equals("None")){
+        //     File dir=new File(directoryLabel.getText().substring(17));
+        //     File[] allfiles=dir.listFiles();
+        //     recordingButtons= new Button[allfiles.length];
+        //     for(int i=0;i<allfiles.length;i++){
+        //         if (allfiles[i].getName().endsWith(".wav")){
+        //             recordingButtons[i]=new Button(allfiles[i].getName());
+        //             recordingButtons[i].setMinWidth(130);
+        //             recordingButtons[i].setMaxWidth(130);
+        //             recordingButtons[i].setMaxHeight(25);
+        //             recordingButtons[i].setId("recordingbutton");
+        //         }
+        //     }
+        // }
+        // else{
+        //     recordingButtons=new Button[0];
+        // }
+        return recordingButtons;
     }
 
+
+    // DASHBOARD PAGE
     public void Dashboard() {
         Pane dashboardRoot = new Pane();
         Font.loadFont(getClass().getResourceAsStream("/resources/fonts/Jersey10-Regular.ttf"), 70);
@@ -59,27 +107,58 @@ public class Main extends Application {
         dashbuttonContainer.setLayoutY(20);
         dashbuttonContainer.setMinWidth(100);
 
-        changedirectory(); 
+        Button[] buttons=changedirectory(); 
+        HBox recordingButtonsContainer=new HBox();
+        for (int i=0;i<buttons.length;i++){
+            recordingButtonsContainer.getChildren().add(buttons[i]);
+        }
 
-        Button recordingButton = new Button("recording 1");
-        recordingButton.setMinWidth(130);
-        recordingButton.setMaxWidth(130);
-        recordingButton.setMaxHeight(25);
-        recordingButton.setId("recordingbutton");
-
-        HBox recordingButtonsContainer = new HBox(recordingButton);
         recordingButtonsContainer.setLayoutX(30);
         recordingButtonsContainer.setLayoutY(70);
         recordingButtonsContainer.setMinWidth(600);
-        
-        dashboardRoot.getChildren().addAll(dasheading, dashbuttonContainer, directoryContainer, recordingButtonsContainer);
+        dashboardRoot.getChildren().add(recordingButtonsContainer);
+        dashboardRoot.getChildren().addAll(dasheading, dashbuttonContainer, directoryContainer);
         Scene dashboardScene = new Scene(dashboardRoot, 900, 600);
         primaryStage.setTitle("Dashboard");
         primaryStage.setScene(dashboardScene);
         dashboardScene.getStylesheets().add(getClass().getResource("/styles/styles.css").toExternalForm());
     }
 
+
+    // RECORDING PAGE
     public void Record() {
+
+        AudioFormat format = new AudioFormat(44100, 16, 2, true, true);
+        DataLine.Info info = new DataLine.Info(TargetDataLine.class, format);
+        File outputFile = new File("file.wav");
+        TargetDataLine targetLine;
+        Button stoprecord = new Button("stop rec...");
+        stoprecord.setMinWidth(150);
+        stoprecord.setMaxWidth(150);
+        stoprecord.setMaxHeight(40);
+        try{
+            targetLine = (TargetDataLine) AudioSystem.getLine(info);
+            targetLine.open(format);
+            targetLine.start();
+            Thread recording=new Thread(()->{
+                try {
+                    AudioSystem.write(new AudioInputStream(targetLine), AudioFileFormat.Type.WAVE, outputFile);
+                } catch (IOException e) {
+                    e.printStackTrace();
+                }
+            });
+            recording.start();
+            stoprecord.setOnAction(e -> {
+                targetLine.stop();
+                targetLine.close();
+                recording.interrupt();
+                Dashboard();
+            });
+        }
+        catch(Exception e){
+            e.printStackTrace();
+        }
+
         Pane recordRoot = new Pane();
         Font.loadFont(getClass().getResourceAsStream("/resources/fonts/Jersey10-Regular.ttf"), 70);
         Image gifImage = new Image(getClass().getResource("/resources/waves.gif").toExternalForm());
@@ -102,12 +181,6 @@ public class Main extends Application {
         backbuttonContainer.setLayoutY(20);
         backbuttonContainer.setMinWidth(100);
 
-        Button stoprecord = new Button("stop rec...");
-        stoprecord.setMinWidth(150);
-        stoprecord.setMaxWidth(150);
-        stoprecord.setMaxHeight(40);
-        stoprecord.setOnAction(e -> Dashboard());
-
         HBox stoprecbuttonContainer = new HBox(stoprecord);
         stoprecbuttonContainer.setLayoutX(350);
         stoprecbuttonContainer.setLayoutY(400);
@@ -120,6 +193,8 @@ public class Main extends Application {
         recordScene.getStylesheets().add(getClass().getResource("/styles/styles.css").toExternalForm());
     }
 
+
+    // Landing (HOME)
     @Override
     public void start(Stage primaryStage) {
         this.primaryStage = primaryStage;

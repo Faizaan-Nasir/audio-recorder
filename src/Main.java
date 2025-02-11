@@ -1,6 +1,5 @@
 import javafx.application.Application;
 import javafx.geometry.Pos;
-import javafx.scene.layout.AnchorPane;
 import javafx.scene.Scene;
 import javafx.scene.layout.*;
 import javafx.scene.control.Button;
@@ -30,7 +29,7 @@ public class Main extends Application {
         directoryLabel.setId("directorylabel");
 
         directoryContainer = new HBox(20, chooseDirButton, directoryLabel);
-        directoryContainer.setLayoutX(20);
+        directoryContainer.setLayoutX(30);
         directoryContainer.setLayoutY(510); 
         directoryContainer.setMinWidth(900);
         directoryContainer.setAlignment(javafx.geometry.Pos.CENTER_LEFT);
@@ -62,7 +61,18 @@ public class Main extends Application {
 
         changedirectory(); 
 
-        dashboardRoot.getChildren().addAll(dasheading, dashbuttonContainer, directoryContainer);
+        Button recordingButton = new Button("recording 1");
+        recordingButton.setMinWidth(130);
+        recordingButton.setMaxWidth(130);
+        recordingButton.setMaxHeight(25);
+        recordingButton.setId("recordingbutton");
+
+        HBox recordingButtonsContainer = new HBox(recordingButton);
+        recordingButtonsContainer.setLayoutX(30);
+        recordingButtonsContainer.setLayoutY(70);
+        recordingButtonsContainer.setMinWidth(600);
+        
+        dashboardRoot.getChildren().addAll(dasheading, dashbuttonContainer, directoryContainer, recordingButtonsContainer);
         Scene dashboardScene = new Scene(dashboardRoot, 900, 600);
         primaryStage.setTitle("Dashboard");
         primaryStage.setScene(dashboardScene);

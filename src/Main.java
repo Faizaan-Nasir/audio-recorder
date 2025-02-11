@@ -15,8 +15,10 @@ import javafx.stage.DirectoryChooser;
 import java.io.File;
 
 public class Main extends Application {
+
+    public static final String FONT_PATH = "/resources/fonts/Jersey10-Regular.ttf";
     private Stage primaryStage;
-    private HBox directoryContainer; 
+    private HBox directoryContainer;
 
     public void changedirectory() {
         Button chooseDirButton = new Button("Choose Dir");
@@ -30,7 +32,7 @@ public class Main extends Application {
 
         directoryContainer = new HBox(20, chooseDirButton, directoryLabel);
         directoryContainer.setLayoutX(30);
-        directoryContainer.setLayoutY(510); 
+        directoryContainer.setLayoutY(510);
         directoryContainer.setMinWidth(900);
         directoryContainer.setAlignment(javafx.geometry.Pos.CENTER_LEFT);
         HBox.setHgrow(directoryLabel, Priority.ALWAYS);
@@ -39,7 +41,7 @@ public class Main extends Application {
 
     public void Dashboard() {
         Pane dashboardRoot = new Pane();
-        Font.loadFont(getClass().getResourceAsStream("/resources/fonts/Jersey10-Regular.ttf"), 70);
+        Font.loadFont(getClass().getResourceAsStream(FONT_PATH), 70);
 
         Label dasheading = new Label("Dashboard");
         dasheading.setMinWidth(900);
@@ -59,7 +61,7 @@ public class Main extends Application {
         dashbuttonContainer.setLayoutY(20);
         dashbuttonContainer.setMinWidth(100);
 
-        changedirectory(); 
+        changedirectory();
 
         Button recordingButton = new Button("recording 1");
         recordingButton.setMinWidth(130);
@@ -71,8 +73,9 @@ public class Main extends Application {
         recordingButtonsContainer.setLayoutX(30);
         recordingButtonsContainer.setLayoutY(70);
         recordingButtonsContainer.setMinWidth(600);
-        
-        dashboardRoot.getChildren().addAll(dasheading, dashbuttonContainer, directoryContainer, recordingButtonsContainer);
+
+        dashboardRoot.getChildren().addAll(dasheading, dashbuttonContainer, directoryContainer,
+                recordingButtonsContainer);
         Scene dashboardScene = new Scene(dashboardRoot, 900, 600);
         primaryStage.setTitle("Dashboard");
         primaryStage.setScene(dashboardScene);
@@ -81,7 +84,7 @@ public class Main extends Application {
 
     public void Record() {
         Pane recordRoot = new Pane();
-        Font.loadFont(getClass().getResourceAsStream("/resources/fonts/Jersey10-Regular.ttf"), 70);
+        Font.loadFont(getClass().getResourceAsStream(FONT_PATH), 70);
         Image gifImage = new Image(getClass().getResource("/resources/waves.gif").toExternalForm());
         ImageView gifView = new ImageView(gifImage);
         gifView.setFitWidth(450);
@@ -123,7 +126,7 @@ public class Main extends Application {
     @Override
     public void start(Stage primaryStage) {
         this.primaryStage = primaryStage;
-        Font.loadFont(getClass().getResourceAsStream("/resources/fonts/Jersey10-Regular.ttf"), 70);
+        Font.loadFont(getClass().getResourceAsStream(FONT_PATH), 70);
         Pane homeroot = new Pane();
 
         Label heading = new Label("Voice Recorder");
@@ -133,7 +136,7 @@ public class Main extends Application {
         heading.setLayoutY(200);
         heading.setId("title");
 
-        Image mic_icon = new Image(getClass().getResourceAsStream("/resources/microphone.png"));
+        Image mic_icon = new Image(getClass().getResourceAsStream(FONT_PATH));
         ImageView micView = new ImageView(mic_icon);
         micView.setFitWidth(20);
         micView.setFitHeight(25);

@@ -28,62 +28,6 @@ public class Main extends Application {
     private Stage primaryStage;
     private HBox directoryContainer; 
 
-
-    // CHANGE DIRECTORY FUNCTION
-    public Button[] changedirectory() {
-        Label directoryLabel = new Label("Selected Folder: None");
-        directoryLabel.setId("directorylabel");
-        Button chooseDirButton = new Button("Choose Dir");
-        chooseDirButton.setMinWidth(120);
-        chooseDirButton.setMaxWidth(120);
-        chooseDirButton.setMaxHeight(20);
-        chooseDirButton.setId("choosedirbutton");
-        DirectoryChooser directoryChooser = new DirectoryChooser();
-
-        directoryContainer = new HBox(20, chooseDirButton, directoryLabel);
-        directoryContainer.setLayoutX(30);
-        directoryContainer.setLayoutY(510); 
-        directoryContainer.setMinWidth(900);
-        directoryContainer.setAlignment(javafx.geometry.Pos.CENTER_LEFT);
-        HBox.setHgrow(directoryLabel, Priority.ALWAYS);
-        directoryLabel.setMaxWidth(Double.MAX_VALUE);
-        
-        chooseDirButton.setOnAction(e -> {
-            directoryChooser.setTitle("Select a Folder");
-            directoryChooser.setInitialDirectory(new File(System.getProperty("user.home")));
-
-            File selectedDirectory = directoryChooser.showDialog(primaryStage);
-            
-            if (selectedDirectory != null) {
-                directoryLabel.setText("Selected Folder: " + selectedDirectory.getAbsolutePath());
-            }
-            else{
-                directoryLabel.setText("Selected Folder: None");
-            }
-        });
-        Button[] recordingButtons=new Button[0];
-        // to be rethought
-        // if(!directoryLabel.getText().substring(17).equals("None")){
-        //     File dir=new File(directoryLabel.getText().substring(17));
-        //     File[] allfiles=dir.listFiles();
-        //     recordingButtons= new Button[allfiles.length];
-        //     for(int i=0;i<allfiles.length;i++){
-        //         if (allfiles[i].getName().endsWith(".wav")){
-        //             recordingButtons[i]=new Button(allfiles[i].getName());
-        //             recordingButtons[i].setMinWidth(130);
-        //             recordingButtons[i].setMaxWidth(130);
-        //             recordingButtons[i].setMaxHeight(25);
-        //             recordingButtons[i].setId("recordingbutton");
-        //         }
-        //     }
-        // }
-        // else{
-        //     recordingButtons=new Button[0];
-        // }
-        return recordingButtons;
-    }
-
-
     // DASHBOARD PAGE
     public void Dashboard() {
         Pane dashboardRoot = new Pane();
@@ -107,11 +51,55 @@ public class Main extends Application {
         dashbuttonContainer.setLayoutY(20);
         dashbuttonContainer.setMinWidth(100);
 
-        Button[] buttons=changedirectory(); 
-        HBox recordingButtonsContainer=new HBox();
-        for (int i=0;i<buttons.length;i++){
-            recordingButtonsContainer.getChildren().add(buttons[i]);
-        }
+        Label directoryLabel = new Label("Selected Folder: None");
+        directoryLabel.setId("directorylabel");
+        Button chooseDirButton = new Button("Choose Dir");
+        chooseDirButton.setMinWidth(120);
+        chooseDirButton.setMaxWidth(120);
+        chooseDirButton.setMaxHeight(20);
+        chooseDirButton.setId("choosedirbutton");
+        DirectoryChooser directoryChooser = new DirectoryChooser();
+
+        directoryContainer = new HBox(20, chooseDirButton, directoryLabel);
+        directoryContainer.setLayoutX(30);
+        directoryContainer.setLayoutY(510); 
+        directoryContainer.setMinWidth(900);
+        directoryContainer.setAlignment(javafx.geometry.Pos.CENTER_LEFT);
+        HBox.setHgrow(directoryLabel, Priority.ALWAYS);
+        directoryLabel.setMaxWidth(Double.MAX_VALUE);
+        
+        FlowPane recordingButtonsContainer=new FlowPane();
+        recordingButtonsContainer.setPrefWidth(600);
+        recordingButtonsContainer.setVgap(20);
+        recordingButtonsContainer.setHgap(20);
+
+        chooseDirButton.setOnAction(e -> {
+            directoryChooser.setTitle("Select a Folder");
+            directoryChooser.setInitialDirectory(new File(System.getProperty("user.home")));
+
+            File selectedDirectory = directoryChooser.showDialog(primaryStage);
+            
+            if (selectedDirectory != null) {
+                directoryLabel.setText("Selected Folder: " + selectedDirectory.getAbsolutePath());
+            }
+            else{
+                directoryLabel.setText("Selected Folder: None");
+            }
+
+            recordingButtonsContainer.getChildren().removeAll();
+            File[] allFiles=selectedDirectory.listFiles();
+            Button[] allButtons=new Button[allFiles.length];
+            for (int i=0;i<allFiles.length;i++){
+                if (allFiles[i].getName().endsWith(".wav")){
+                    allButtons[i]=new Button(allFiles[i].getName());
+                    allButtons[i].setMinWidth(130);
+                    allButtons[i].setMaxWidth(130);
+                    allButtons[i].setMaxHeight(25);
+                    allButtons[i].setId("recordingbutton");
+                    recordingButtonsContainer.getChildren().add(allButtons[i]);
+                }
+            }
+        });
 
         recordingButtonsContainer.setLayoutX(30);
         recordingButtonsContainer.setLayoutY(70);

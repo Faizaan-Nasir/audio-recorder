@@ -1,4 +1,5 @@
 import javafx.application.Application;
+import javafx.geometry.HPos;
 import javafx.geometry.Pos;
 import javafx.scene.Scene;
 import javafx.scene.layout.*;
@@ -15,13 +16,7 @@ import javafx.stage.DirectoryChooser;
 import java.io.File;
 import java.io.IOException;
 
-import javax.sound.sampled.AudioFileFormat;
-import javax.sound.sampled.AudioFormat;
-import javax.sound.sampled.AudioInputStream;
-import javax.sound.sampled.AudioSystem;
-import javax.sound.sampled.DataLine;
-import javax.sound.sampled.TargetDataLine;
-import java.io.File;
+import javax.sound.sampled.*;
 
 
 public class Main extends Application {
@@ -68,10 +63,12 @@ public class Main extends Application {
         HBox.setHgrow(directoryLabel, Priority.ALWAYS);
         directoryLabel.setMaxWidth(Double.MAX_VALUE);
         
-        FlowPane recordingButtonsContainer=new FlowPane();
-        recordingButtonsContainer.setPrefWidth(600);
+        GridPane recordingButtonsContainer=new GridPane();
+        recordingButtonsContainer.setPrefWidth(400);
+        recordingButtonsContainer.setMaxWidth(400);
         recordingButtonsContainer.setVgap(20);
         recordingButtonsContainer.setHgap(20);
+        int columns=3;
 
         chooseDirButton.setOnAction(e -> {
             directoryChooser.setTitle("Select a Folder");
@@ -89,18 +86,42 @@ public class Main extends Application {
             recordingButtonsContainer.getChildren().removeAll();
             File[] allFiles=selectedDirectory.listFiles();
             Button[] allButtons=new Button[allFiles.length];
+            int row=0,col=0;
             for (int i=0;i<allFiles.length;i++){
                 if (allFiles[i].getName().endsWith(".wav")){
                     allButtons[i]=new Button(allFiles[i].getName());
                     allButtons[i].setMinWidth(130);
                     allButtons[i].setMaxWidth(130);
+                    allButtons[i].setPrefWidth(130);
                     allButtons[i].setMaxHeight(25);
                     allButtons[i].setId("recordingbutton");
-                    recordingButtonsContainer.getChildren().add(allButtons[i]);
+                    final int tempi=i;
+                    allButtons[i].setOnAction(f->{
+                        Thread newThread=new Thread(()->{
+                            try{
+                                File audioFile=new File(selectedDirectory.getAbsolutePath()+"\\"+allFiles[tempi].getName());
+                                AudioInputStream audioStream = AudioSystem.getAudioInputStream(audioFile);
+                                Clip clip=AudioSystem.getClip();
+                                clip.open(audioStream);
+                                clip.start();
+                            }
+                            catch(Exception k){
+                                k.printStackTrace();
+                            }
+                        });
+                        newThread.start();
+                    });
+                    recordingButtonsContainer.add(allButtons[i],col,row);
+                    col++;
+                    if (col==columns){
+                        col=0;
+                        row++;
+                    }
                 }
             }
         });
 
+        
         recordingButtonsContainer.setLayoutX(30);
         recordingButtonsContainer.setLayoutY(70);
         recordingButtonsContainer.setMinWidth(600);

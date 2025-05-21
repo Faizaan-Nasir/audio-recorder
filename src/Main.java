@@ -1,5 +1,4 @@
 import javafx.application.Application;
-import javafx.geometry.HPos;
 import javafx.geometry.Pos;
 import javafx.scene.Scene;
 import javafx.scene.layout.*;
@@ -8,13 +7,11 @@ import javafx.scene.control.Button;
 // import javafx.scene.paint.Color;
 import javafx.stage.Stage;
 import javafx.scene.control.Label;
-import javafx.scene.image.ImageView;
+import javafx.scene.image.*;
 import javafx.scene.control.ContentDisplay;
-import javafx.scene.image.Image;
 import javafx.scene.text.Font;
 import javafx.stage.DirectoryChooser;
-import java.io.File;
-import java.io.IOException;
+import java.io.*;
 
 import javax.sound.sampled.*;
 
@@ -88,7 +85,7 @@ public class Main extends Application {
             Button[] allButtons=new Button[allFiles.length];
             int row=0,col=0;
             for (int i=0;i<allFiles.length;i++){
-                if (allFiles[i].getName().endsWith(".wav")){
+                if (allFiles[i].getName().endsWith(".wav")||allFiles[i].getName().endsWith(".mp3")){
                     allButtons[i]=new Button(allFiles[i].getName());
                     allButtons[i].setMinWidth(130);
                     allButtons[i].setMaxWidth(130);

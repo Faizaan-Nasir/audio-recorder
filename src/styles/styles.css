@@ -35,7 +35,6 @@
     /* -fx-translate-y: 2px;
     -fx-scale-x: 1.05;
     -fx-scale-y: 1.05; */
-    -fx-effect: dropshadow(gaussian, rgba(0, 0, 0, 0.4), 10, 0.3, 0, 5);
 }
 
 #backbutton {
@@ -52,7 +51,7 @@
     /* -fx-translate-y: 2px;
     -fx-scale-x: 1.05;
     -fx-scale-y: 1.05; */
-    -fx-effect: dropshadow(gaussian, rgba(0, 0, 0, 0.4), 10, 0.3, 0, 5);
+    /* -fx-effect: dropshadow(gaussian, rgba(0, 0, 0, 0.4), 10, 0.3, 0, 5); */
 }
 
 #directorylabel {
@@ -72,10 +71,10 @@
 
 #choosedirbutton:hover {
     -fx-background-color: rgba(220, 220, 220, 0.20);
-    -fx-translate-y: 2px;
+    /* -fx-translate-y: 2px;
     -fx-scale-x: 1.05;
     -fx-scale-y: 1.05;
-    -fx-effect: dropshadow(gaussian, rgba(0, 0, 0, 0.4), 10, 0.3, 0, 5);
+    -fx-effect: dropshadow(gaussian, rgba(0, 0, 0, 0.4), 10, 0.3, 0, 5); */
 }
 
 #recordingbutton {
@@ -89,8 +88,8 @@
 
 #recordingbutton:hover {
     -fx-background-color: rgba(220, 220, 220, 0.20);
-    -fx-translate-y: 2px;
+    /* -fx-translate-y: 2px;
     -fx-scale-x: 1.05;
     -fx-scale-y: 1.05;
-    -fx-effect: dropshadow(gaussian, rgba(0, 0, 0, 0.4), 10, 0.3, 0, 5);
+    -fx-effect: dropshadow(gaussian, rgba(0, 0, 0, 0.4), 10, 0.3, 0, 5); */
 }
